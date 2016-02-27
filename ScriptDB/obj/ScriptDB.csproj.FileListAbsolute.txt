@@ -1,0 +1,2 @@
+D:\Downloads\Codeplex\Scriptdb\v1.3\SourceCode\20160211\ScriptDB\obj\Debug\ResolveAssemblyReference.cache
+D:\Downloads\Codeplex\Scriptdb\v1.3\SourceCode\20160211\ScriptDB\obj\Debug\ScriptDb.exe
