@@ -1,0 +1,7 @@
+D:\Downloads\Codeplex\Scriptdb\v1.3\SourceCode\20160211\obj\Debug\ResolveAssemblyReference.cache
+D:\Downloads\Codeplex\Scriptdb\v1.3\SourceCode\20160211\bin\Debug\ScriptDb.exe
+D:\Downloads\Codeplex\Scriptdb\v1.3\SourceCode\20160211\bin\Debug\ScriptDb.pdb
+D:\Downloads\Codeplex\Scriptdb\v1.3\SourceCode\20160211\bin\Debug\Microsoft.SqlServer.BatchParser.dll
+D:\Downloads\Codeplex\Scriptdb\v1.3\SourceCode\20160211\bin\Debug\Microsoft.SqlServer.Replication.dll
+D:\Downloads\Codeplex\Scriptdb\v1.3\SourceCode\20160211\obj\Debug\ScriptDb.exe
+D:\Downloads\Codeplex\Scriptdb\v1.3\SourceCode\20160211\obj\Debug\ScriptDb.pdb
