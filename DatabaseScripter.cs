@@ -195,7 +195,19 @@ GO
                 {
                     if (!FilterExists() || Array.IndexOf(_TableFilter, table.Name) >= 0)
                     {
-                        string FileName = Path.Combine(tables, FixUpFileName(table.Name) + ".sql");
+                        string FileName = Path.Combine
+								(
+									  tables
+									, FixUpFileName
+										(
+											string.Format
+											(
+												"{0}.{1}.sql"
+												, table.Schema
+												, table.Name
+											)
+										)	
+								);
                         #region Table Definition
                         using (StreamWriter sw = GetStreamWriter(FileName, false))
                         {
@@ -222,10 +234,25 @@ GO
                         {
                             if (!smo.IsSystemObject && !smo.IsEncrypted)
                             {
+								
                                 if (!_TableOneFile)
+								{
                                     FileName =
-                                        Path.Combine(triggers,
-                                                     FixUpFileName(string.Format("{0}.{1}.sql", table.Name, smo.Name)));
+                                        Path.Combine(
+														  triggers
+														, FixUpFileName
+														(
+															string.Format
+															(
+																"{0}.{1}.{2}.sql"
+																, table.Schema
+																, table.Name
+																, smo.Name
+															)
+														)
+													);
+								}
+
                                 using (StreamWriter sw = GetStreamWriter(FileName, _TableOneFile))
                                 {
                                     if (verbose) Console.WriteLine("{0] Scripting {1}.{2}", db.Name, table.Name, smo.Name);
@@ -256,13 +283,40 @@ GO
                                 string dir =
                                     (smo.IndexKeyType == IndexKeyType.DriPrimaryKey) ? primaryKeys :
                                     (smo.IndexKeyType == IndexKeyType.DriUniqueKey) ? uniqueKeys : indexes;
+									
                                 if (!_TableOneFile)
+								{	
                                     FileName =
-                                        Path.Combine(dir,
-                                                     FixUpFileName(string.Format("{0}.{1}.sql", table.Name, smo.Name)));
+                                        Path.Combine(
+														   dir
+														,  FixUpFileName
+															(
+																string.Format
+																(
+																	"{0}.{1}.{2}.sql"
+																	, table.Schema																	
+																	, table.Name
+																	, smo.Name
+																)
+															)
+													);
+								}
+
                                 using (StreamWriter sw = GetStreamWriter(FileName, _TableOneFile))
                                 {
-                                    if (verbose) Console.WriteLine("{0} Scripting {1}.{2}", db.Name, table.Name, smo.Name);
+                                    if (verbose) 
+									{
+										
+										Console.WriteLine
+										(
+											"{0} Scripting {1}.{2}.{3}"
+											, db.Name
+											, table.Schema											
+											, table.Name
+											, smo.Name
+										);
+										
+									}
                                     if (!_CreateOnly)
                                     {
                                         so.ScriptDrops = so.IncludeIfNotExists = true;
@@ -287,11 +341,34 @@ GO
                         {
                             if (!_TableOneFile)
                                 FileName =
-                                    Path.Combine(foreignKeys,
-                                                 FixUpFileName(string.Format("{0}.{1}.sql", table.Name, smo.Name)));
+                                    Path.Combine(
+													  foreignKeys
+													, FixUpFileName
+													(
+														string.Format
+														(
+															"{0}.{1}.{2}.sql"
+															, table.Schema
+															, table.Name
+															, smo.Name
+														)
+													)
+												);
                             using (StreamWriter sw = GetStreamWriter(FileName, _TableOneFile))
                             {
-                                if (verbose) Console.WriteLine("{0} Scripting {1}.{2}", db.Name, table.Name, smo.Name);
+                                if (verbose)
+								{
+									Console.WriteLine
+									(
+										"{0} Scripting {1} {2}.{3}"
+										, db.Name
+										, table.Schema
+										, table.Name
+										, smo.Name
+									);
+									
+								}
+								
                                 if (!_CreateOnly)
                                 {
                                     so.ScriptDrops = so.IncludeIfNotExists = true;
@@ -313,11 +390,28 @@ GO
                         {
                             if (!_TableOneFile)
                                 FileName =
-                                    Path.Combine(constraints,
-                                                 FixUpFileName(string.Format("{0}.{1}.sql", table.Name, smo.Name)));
+                                    Path.Combine(constraints
+													, FixUpFileName
+														(
+															string.Format
+																(
+																	"{0}.{1}.{2}.sql"
+																	, table.Schema
+																	, table.Name
+																	, smo.Name
+																)
+														)
+												);
                             using (StreamWriter sw = GetStreamWriter(FileName, _TableOneFile))
                             {
-                                if (verbose) Console.WriteLine("{0} Scripting {1}.{2}", db.Name, table.Name, smo.Name);
+                                if (verbose) Console.WriteLine
+								(
+									  "{0} Scripting {1} {2}.{3}"
+									, db.Name
+									, table.Schema									
+									, table.Name
+									, smo.Name
+								);
                                 WriteScript(smo.Script(), sw);
                                 if (_ScriptProperties && smo is IExtendedProperties)
                                 {
@@ -444,7 +538,24 @@ GO
                 {
                     if (!FilterExists() || Array.IndexOf(_SprocsFilter, smo.Name) >= 0)
                     {
-                        using (StreamWriter sw = GetStreamWriter(Path.Combine(sprocs, FixUpFileName(smo.Name) + ".sql"), false))
+                        using (StreamWriter sw = GetStreamWriter
+													(
+														Path.Combine
+														(
+															  sprocs
+															, FixUpFileName
+																(
+																	string.Format
+																	(
+																		"{0}.{1}.sql"
+																		, smo.Schema
+																		, smo.Name
+																	)
+																)																
+														)
+														, false
+													)
+								)
                         {
                             if (verbose) Console.WriteLine("{0} Scripting {1}", db.Name, smo.Name);
                             if (_ScriptAsCreate)
@@ -488,7 +599,24 @@ GO
                 {
                     if (!FilterExists() || Array.IndexOf(_ViewsFilter, smo.Name) >= 0)
                     {
-                        using (StreamWriter sw = GetStreamWriter(Path.Combine(views, FixUpFileName(smo.Name) + ".sql"), false))
+                        using (StreamWriter sw = GetStreamWriter
+								(
+									Path.Combine
+									(
+										  views
+										,  FixUpFileName
+															(
+																string.Format
+																(
+																	"{0}.{1}.sql"
+																	, smo.Schema																	
+																	, smo.Name
+																)
+															)										
+									)
+									, false
+								)
+							)
                         {
                             if (verbose) Console.WriteLine("{0} Scripting {1}", db.Name, smo.Name);
                             if (!_CreateOnly)
@@ -528,7 +656,25 @@ GO
                 {
                     if (!FilterExists() || Array.IndexOf(_UdfsFilter, smo.Name) >= 0)
                     {
-                        using (StreamWriter sw = GetStreamWriter(Path.Combine(udfs, FixUpFileName(smo.Name) + ".sql"), false))
+
+                        using (StreamWriter sw = GetStreamWriter
+								(
+									Path.Combine
+									(
+										  udfs
+										,  FixUpFileName
+											(
+												string.Format
+												(
+													"{0}.{1}.sql"
+													, smo.Schema																	
+													, smo.Name
+												)
+											)										
+									)
+									, false
+								)
+							)							
                         {
                             if (verbose) Console.WriteLine("{0} Scripting {1}", db.Name, smo.Name);
                             if (!_CreateOnly)
@@ -564,7 +710,26 @@ GO
             {
                 if (!FilterExists() || Array.IndexOf(_UdtsFilter, smo.Name) >= 0)
                 {
-                    using (StreamWriter sw = GetStreamWriter(Path.Combine(types, FixUpFileName(smo.Name) + ".sql"), false))
+                    using (StreamWriter sw = GetStreamWriter
+							(
+							
+								Path.Combine
+								(
+									   types
+									,  FixUpFileName
+										(
+											string.Format
+											(
+												"{0}.{1}.sql"
+												, smo.Schema																	
+												, smo.Name
+											)
+										)										
+								)								
+							    , false
+								
+							)
+						)
                     {
                         if (verbose) Console.WriteLine("{0} Scripting {1}", db.Name, smo.Name);
                         if (!_CreateOnly)
@@ -595,7 +760,27 @@ GO
             {
                 if (!FilterExists() || Array.IndexOf(_UddtsFilter, smo.Name) >= 0)
                 {
-                    using (StreamWriter sw = GetStreamWriter(Path.Combine(types, FixUpFileName(smo.Name) + ".sql"), false))
+	
+					using (StreamWriter sw = GetStreamWriter
+							(
+							
+								Path.Combine
+								(
+									   types
+									,  FixUpFileName
+										(
+											string.Format
+											(
+												"{0}.{1}.sql"
+												, smo.Schema																	
+												, smo.Name
+											)
+										)										
+								)								
+							    , false
+								
+							)
+						)						
                     {
                         if (verbose) Console.WriteLine("{0} Scripting {1}", db.Name, smo.Name);
                         if (!_CreateOnly)
@@ -627,7 +812,24 @@ GO
             {
                 if (!FilterExists() || Array.IndexOf(_RulesFilter, smo.Name) >= 0)
                 {
-                    using (StreamWriter sw = GetStreamWriter(Path.Combine(rules, FixUpFileName(smo.Name) + ".sql"), false))
+                    using (StreamWriter sw = GetStreamWriter
+					(
+							Path.Combine
+							(
+								   rules
+								,  FixUpFileName
+									(
+										string.Format
+										(
+											"{0}.{1}.sql"
+											, smo.Schema																	
+											, smo.Name
+										)
+									)																			
+							)
+							, false
+						)
+					)
                     {
                         if (verbose) Console.WriteLine("{0} Scripting {1}", db.Name, smo.Name);
                         if (!_CreateOnly)
@@ -659,8 +861,31 @@ GO
                 if (!FilterExists() || Array.IndexOf(_DefaultsFilter, smo.Name) >= 0)
                 {
                     using (
-                        StreamWriter sw =
-                            GetStreamWriter(Path.Combine(defaults, FixUpFileName(smo.Name) + ".sql"), false))
+					
+							StreamWriter sw =
+							
+								GetStreamWriter
+								(
+									Path.Combine
+									(
+									
+										  defaults
+										,  FixUpFileName
+										(
+											string.Format
+											(
+												"{0}.{1}.sql"
+												, smo.Schema																	
+												, smo.Name
+											)
+										)												
+											
+									)
+									
+									, false
+									
+								)
+						)
                     {
                         if (verbose) Console.WriteLine("{0} Scripting {1}", db.Name, smo.Name);
                         if (!_CreateOnly)
@@ -691,7 +916,26 @@ GO
             {
                 if (!FilterExists() || Array.IndexOf(_DdlTriggersFilter, smo.Name) >= 0)
                 {
-                    using (StreamWriter sw = GetStreamWriter(Path.Combine(triggers, FixUpFileName(smo.Name) + ".sql"), false))
+                    using (StreamWriter sw = GetStreamWriter
+					(
+						Path.Combine
+							(
+								  triggers
+								,  FixUpFileName
+								(
+									string.Format
+									(
+										"{0}.sql"
+										, smo.Name
+									)
+								)												
+								
+								
+								)
+								, false
+							)
+					)
+					
                     {
                         if (verbose) Console.WriteLine("{0} Scripting {1}", db.Name, smo.Name);
                         if (!_CreateOnly)
